@@ -1,11 +1,18 @@
 #pragma once
 
 #include "TokenType.hpp"
+#include <string>
 
 class Object {
 public:
   Object(){};
+  Object(const std::string &value) : lexemeString(value){};
+  Object(double value) : lexemeDouble(value){};
   std::string get() const { return "whoami"; }
+
+private:
+  std::string lexemeString{};
+  double lexemeDouble{};
 };
 
 class Token {
