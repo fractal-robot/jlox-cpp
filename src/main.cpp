@@ -18,4 +18,4 @@ int main(int argc, char *argv[]) {
 }
 
 // non clear wether using Object or Tokens for storing values, surely will not
-// use object
+// use object -> use unions

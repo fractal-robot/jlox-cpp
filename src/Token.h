@@ -3,29 +3,13 @@
 #include "TokenType.h"
 #include <string>
 
-class Object {
-public:
-  Object(){};
-  Object(const std::string &value) : lexemeString(value){};
-  Object(double value) : lexemeDouble(value){};
-  std::string get() const { return "whoami"; }
-
-private:
-  std::string lexemeString{};
-  double lexemeDouble{};
-};
-
 class Token {
 public:
   const TokenType type;
-  const std::string lexeme;
-  const Object literal;
   const int line;
+  std::string lexeme;
 
-  Token(TokenType type, const std::string lexeme, Object literal, int line)
-      : type(type), lexeme(lexeme), literal(literal), line(line) {}
-
+  Token(TokenType type, int line, std::string lexeme);
   std::string toString();
-
   void print();
 };

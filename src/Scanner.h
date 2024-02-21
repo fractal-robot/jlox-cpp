@@ -15,7 +15,7 @@ private:
   bool isAtEnd();
   void scanToken();
   inline void addToken(TokenType type);
-  inline void addToken(TokenType type, Object literal);
+  inline void addToken(TokenType type, const std::string &literal);
   inline char advance();
   bool match(char expected);
   char peek();

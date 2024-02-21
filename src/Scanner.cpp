@@ -15,7 +15,7 @@ std::vector<Token> Scanner::scanTokens() {
     scanToken();
   }
 
-  tokens.emplace_back(Token(TokenType::EOF_TOKEN, "", Object(), line));
+  tokens.emplace_back(Token(TokenType::EOF_TOKEN, line, ""));
   return tokens;
 }
 
@@ -23,10 +23,9 @@ bool Scanner::isAtEnd() {
   return static_cast<size_t>(current) >= std::size(source);
 }
 
-inline void Scanner::addToken(TokenType type) { addToken(type); }
-inline void Scanner::addToken(TokenType type, Object literal) {
-  std::string text{source.substr(start, current)};
-  tokens.emplace_back(Token(type, text, literal, line));
+inline void Scanner::addToken(TokenType type) { addToken(type, ""); }
+inline void Scanner::addToken(TokenType type, const std::string &literal) {
+  tokens.emplace_back(Token(type, line, literal));
 }
 inline char Scanner::advance() { return source.at(current++); }
 
@@ -72,10 +71,10 @@ void Scanner::string() {
     return;
   }
 
-  advance(); // the closing "
+  std::string value{source.substr(start + 1, current - (start + 1))};
+  addToken(TokenType::STRING, value);
 
-  std::string value{source.substr(start + 1, current - 1)};
-  addToken(TokenType::STRING, Object(value));
+  advance(); // pass the closing "
 }
 
 void Scanner::number() {
@@ -86,24 +85,28 @@ void Scanner::number() {
   while (isdigit(peek()))
     advance();
 
-  addToken(TokenType::NUMBER, std::stod(source.substr(start, current)));
+  addToken(TokenType::NUMBER, source.substr(start, current - start));
 }
 
 void Scanner::identifier() {
   while (isAlphaNumeric(peek()))
     advance();
-  std::string text{source.substr(start, current)};
+  std::string text{source.substr(start, current - start)};
   auto it = keywords.find(text);
   if (it != keywords.end())
     addToken(it->second);
   else
-    addToken(TokenType::IDENTIFIER);
+    addToken(TokenType::IDENTIFIER, text);
 }
 
 void Scanner::scanToken() {
   char c{advance()};
 
   switch (c) {
+  case '\r':
+  case '\t':
+  case ' ':
+    break;
   case '(':
     addToken(TokenType::LEFT_PARENT);
     break;
@@ -153,10 +156,6 @@ void Scanner::scanToken() {
     else
       addToken(TokenType::SLASH);
     break;
-  case '\r':
-  case '\t':
-  case ' ':
-    break;
   case '\n':
     ++line;
     break;
@@ -171,7 +170,7 @@ void Scanner::scanToken() {
     else
       Lox::error(line,
                  "Unexpected character."); // the incorrect character is still
-                                           // consumed by the advance()
+                                           // consumed by advance()
     break;
     // we keep advancing in the program even if one error have been found so we
     // can report all the errors

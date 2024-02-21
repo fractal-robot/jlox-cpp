@@ -1,17 +1,14 @@
 #include "Token.h"
 #include "TokenType.h"
-#include <iomanip>
-#include <ios>
 #include <iostream>
 #include <string>
 
-std::string Token::toString() {
-  return tokenMap[type] + " " + lexeme + " " + literal.get();
-}
+Token::Token(TokenType type, int line, std::string lexeme)
+    : type(type), line(line), lexeme(lexeme) {}
 
 void Token::print() {
-  std::cout << std::setw(15) << std::left << tokenMap[type] << " | " << lexeme;
   std::cout << "[" << tokenMap[type] << "] ";
-  if (type == TokenType::STRING || type == TokenType::IDENTIFIER)
-    std::cout << lexe;
+  if (type == TokenType::STRING || type == TokenType::IDENTIFIER ||
+      type == TokenType::NUMBER)
+    std::cout << "Value: " << lexeme;
 }
