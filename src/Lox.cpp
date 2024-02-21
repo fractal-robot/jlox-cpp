@@ -1,9 +1,11 @@
-#include "Lox.hpp"
-#include "Scanner.hpp"
+#include "Lox.h"
+#include "Scanner.h"
 #include <fstream>
 #include <iostream>
 #include <sstream>
 #include <string>
+
+bool Lox::hadError;
 
 void Lox::runFile(char *&inputFile) {
   std::ifstream file;
@@ -50,6 +52,7 @@ void Lox::error(int line, const std::string &message) {
 
 void Lox::report(int line, const std::string &where,
                  const std::string &message) {
-  std::cout << "[Line " << line << "] Error" << where << ": " << message;
+  std::cout << "[Line " << line << "] Error" << where << ": " << message
+            << '\n';
   hadError = true;
 }

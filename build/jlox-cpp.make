@@ -134,16 +134,16 @@ endif
 # File Rules
 # #############################################
 
-$(OBJDIR)/Lox.o: ../Lox.cpp
+$(OBJDIR)/Lox.o: ../src/Lox.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/Scanner.o: ../Scanner.cpp
+$(OBJDIR)/Scanner.o: ../src/Scanner.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/Token.o: ../Token.cpp
+$(OBJDIR)/Token.o: ../src/Token.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
-$(OBJDIR)/main.o: ../main.cpp
+$(OBJDIR)/main.o: ../src/main.cpp
 	@echo "$(notdir $<)"
 	$(SILENT) $(CXX) $(ALL_CXXFLAGS) $(FORCE_INCLUDE) -o "$@" -MF "$(@:%.o=%.d)" -c "$<"
 

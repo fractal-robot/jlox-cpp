@@ -1,6 +1,6 @@
 #pragma once
 
-#include "TokenType.hpp"
+#include "TokenType.h"
 #include <string>
 
 class Object {
@@ -28,7 +28,4 @@ public:
   std::string toString();
 
   void print();
-
-private:
-  std::string token;
 };

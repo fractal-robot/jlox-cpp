@@ -1,4 +1,4 @@
-#include "Lox.hpp"
+#include "Lox.h"
 #include <cstdlib>
 #include <iostream>
 
@@ -16,3 +16,6 @@ int main(int argc, char *argv[]) {
 
   return EXIT_SUCCESS;
 }
+
+// non clear wether using Object or Tokens for storing values, surely will not
+// use object

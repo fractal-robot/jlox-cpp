@@ -1,8 +1,9 @@
-#include "Scanner.hpp"
-#include "Lox.hpp"
-#include "Token.hpp"
-#include "TokenType.hpp"
+#include "Scanner.h"
+#include "Lox.h"
+#include "Token.h"
+#include "TokenType.h"
 #include <cctype>
+#include <cstddef>
 #include <iterator>
 #include <string>
 
@@ -18,10 +19,13 @@ std::vector<Token> Scanner::scanTokens() {
   return tokens;
 }
 
-bool Scanner::isAtEnd() { return current >= std::size(source); }
+bool Scanner::isAtEnd() {
+  return static_cast<size_t>(current) >= std::size(source);
+}
 
-inline void Scanner::addToken(TokenType type) { addToken(type, Object()); }
+inline void Scanner::addToken(TokenType type) { addToken(type); }
 inline void Scanner::addToken(TokenType type, Object literal) {
+  std::string text{source.substr(start, current)};
   tokens.emplace_back(Token(type, text, literal, line));
 }
 inline char Scanner::advance() { return source.at(current++); }
@@ -44,12 +48,18 @@ char Scanner::peek() {
 }
 
 char Scanner::peekNext() {
-  if (current + 1 >= std::size(source))
+  if (static_cast<size_t>(current) + 1 >= std::size(source))
     return '\0';
   return source.at(current + 1);
 }
 
-bool isAlphaNumeric(char c) { return isalpha(c) || c == '_' || isdigit(c); }
+bool Scanner::isAlphaNumeric(char c) { return isAlpha(c) || isDigit(c); }
+
+bool Scanner::isAlpha(char c) {
+  return (c >= 'a' && c <= 'z') || (c >= 'A' && c <= 'Z') || (c == '_');
+}
+
+bool Scanner::isDigit(char c) { return (c >= '0' && c <= '9'); }
 
 void Scanner::string() {
   while (peek() != '"' && !isAtEnd()) {
@@ -83,7 +93,6 @@ void Scanner::identifier() {
   while (isAlphaNumeric(peek()))
     advance();
   std::string text{source.substr(start, current)};
-
   auto it = keywords.find(text);
   if (it != keywords.end())
     addToken(it->second);
@@ -138,11 +147,9 @@ void Scanner::scanToken() {
     addToken(match('=') ? TokenType::GREATER_EQUAL : TokenType::GREATER);
     break;
   case '/':
-    if (match('/')) {
+    if (match('/'))
       while (peek() != '\n' && !isAtEnd())
         advance();
-    } else if (isalpha(c) || c == '_')
-      identifier();
     else
       addToken(TokenType::SLASH);
     break;
@@ -157,8 +164,10 @@ void Scanner::scanToken() {
     string();
     break;
   default:
-    if (isdigit(c))
+    if (isDigit(c))
       number();
+    else if (isAlpha(c))
+      identifier();
     else
       Lox::error(line,
                  "Unexpected character."); // the incorrect character is still

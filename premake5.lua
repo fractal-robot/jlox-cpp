@@ -10,7 +10,7 @@ kind "ConsoleApp"
 language "C++"
 targetdir "bin/%{cfg.buildcfg}"
 
-files { "**.h", "**.cpp", "**.c" }
+files { "src/*.h", "src/*.cpp" }
 
 filter "configurations:debug"
 defines { "DEBUG" }

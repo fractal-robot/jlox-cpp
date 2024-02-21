@@ -1,7 +1,7 @@
 #pragma once
 
-#include "Token.hpp"
-#include "TokenType.hpp"
+#include "Token.h"
+#include "TokenType.h"
 #include <string>
 #include <unordered_map>
 #include <vector>
@@ -20,7 +20,9 @@ private:
   bool match(char expected);
   char peek();
   char peekNext();
-  bool isAlphaNumeric(char c);
+  inline bool isAlphaNumeric(char c);
+  inline bool isAlpha(char c);
+  inline bool isDigit(char c);
   void string();
   void number();
   void identifier();
